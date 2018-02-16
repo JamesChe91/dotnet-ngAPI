@@ -14,14 +14,15 @@ export class FetchEmpComponent implements OnInit {
 
   }
   ngOnInit() {
+    this.GetEmpleados();
+  }
+
+  GetEmpleados(): void {
     this.EmpleadoSerivce.GetEmpleados().subscribe(result => {
       this.empleados = result;
     }, error => console.error(error));
   }
-
   DeleteEmpleado(idEmpleado: string): void {
-    this.EmpleadoSerivce.DeleteEmpleado(idEmpleado).subscribe(res => console.log(res));
+    this.EmpleadoSerivce.DeleteEmpleado(idEmpleado).subscribe(res => { this.GetEmpleados() });
   }
-
-
 }
