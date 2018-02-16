@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Empleado } from './empleados';
 import { Observable } from 'rxjs/Observable';
 @Injectable()
@@ -14,11 +14,8 @@ export class EmpleadosService {
   GetEmpleados() {
     return this.http.get<Empleado[]>(this.baseUrl + 'api/Empleado');
   }
-  // GetEmpleados() {
-  //   this.http.get<Empleado[]>(this.baseUrl + 'api/Empleado').subscribe(result => {
-  //     console.log(result);
-  //     return result;
-
-  //   }, error => console.error(error));
-  // }
+  DeleteEmpleado(IdEmpleado: string) {
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.http.delete(this.baseUrl + 'api/Empleado/' + IdEmpleado, httpOptions);
+  }
 }

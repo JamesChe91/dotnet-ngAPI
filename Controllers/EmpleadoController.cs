@@ -39,7 +39,7 @@ namespace pruebaConcepto.Controllers
         }
 
         // PUT api/values/5
-        [HttpPut("{id}")]
+        [HttpPut("{Sempleado}")]
         public void Put([FromRoute]string Sempleado, [FromBody]Empleado emp)
         {
             emp.EMPLEADO = Sempleado;
@@ -48,10 +48,11 @@ namespace pruebaConcepto.Controllers
         }
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete([FromRoute]string Sempleado)
+        [HttpDelete("{Sempleado}")]
+        public IActionResult Delete([FromRoute]string Sempleado)
         {
             empleadoRepository.Delete(Sempleado);
+            return new CreatedAtActionResult("Delete", "Empleado", "aaa", new { id = Sempleado });
         }
     }
 }
