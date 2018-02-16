@@ -15,6 +15,7 @@
       <th>Apellido</th>
       <th>Documento</th>
       <th>Estado</th>
+      <th>Elimiar</th>
     </tr>
   </thead>
   <tbody>
@@ -24,6 +25,11 @@
       <td>{{ empleado.APELLIDO }}</td>
       <td>{{ empleado.DOCTO_IDENT }}</td>
       <td>{{ empleado.ESTADO=='' ? 'Activo' : 'Retirado' }}</td>
+      <td>
+        <button id="btnEliminar" class="btn btn-danger" type="button" (click)="DeleteEmpleado(empleado.EMPLEADO)">
+          <span class='glyphicon glyphicon-trash'></span>
+        </button>
+      </td>
     </tr>
   </tbody>
 </table>
