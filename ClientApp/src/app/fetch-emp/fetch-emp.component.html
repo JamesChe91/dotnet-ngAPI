@@ -1,0 +1,29 @@
+<h1>Empleados</h1>
+
+<p>This component demonstrates fetching
+  <strong>EMP</strong> data from the server.</p>
+
+<p *ngIf="!empleados">
+  <em>Loading...</em>
+</p>
+
+<table class='table' *ngIf="empleados">
+  <thead>
+    <tr>
+      <th>Código</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Documento</th>
+      <th>Estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let empleado of empleados">
+      <td>{{ empleado.empleado }}</td>
+      <td>{{ empleado.nombre }}</td>
+      <td>{{ empleado.apellido }}</td>
+      <td>{{ empleado.docto_ident }}</td>
+      <td>{{ empleado.estado=='' ? 'Activo' : 'Retirado' }}</td>
+    </tr>
+  </tbody>
+</table>
