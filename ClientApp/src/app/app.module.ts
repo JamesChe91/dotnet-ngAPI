@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -10,8 +11,9 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { FetchEmpComponent } from './empleados/fetch-emp/fetch-emp.component';
-import {EmpleadosService} from './empleados/shared/empleados.service';
-
+import { EmpleadosService } from './empleados/shared/empleados.service';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { MenuModule } from 'primeng/menu';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,8 +25,11 @@ import {EmpleadosService} from './empleados/shared/empleados.service';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
+    MenuModule,
+    RadioButtonModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
