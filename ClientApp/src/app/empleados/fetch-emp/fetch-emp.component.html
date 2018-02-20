@@ -1,10 +1,10 @@
 <h1>Empleados</h1>
 
 <p>This component demonstrates fetching
-  <strong>EMP</strong> data from the server.</p>
+    <strong>EMP</strong> data from the server.</p>
 
 <p *ngIf="!empleados">
-  <em>Loading...</em>
+    <em>Loading...</em>
 </p>
 
 <!-- <p-table [columns]="cols" [value]="empleados" [paginator]="true" [rows]="10">
@@ -24,8 +24,16 @@
   </ng-template>
 </p-table> -->
 
-<p-table [columns]="cols" [value]="empleados" [lazy]="true" (onLazyLoad)="loadEmpleadosLazy($event)" [paginator]="true" 
-    [rows]="10" [totalRecords]="totalRecords" [loading]="loading">
+<p-table #dt [columns]="cols" [value]="empleados" [lazy]="true" (onLazyLoad)="loadEmpleadosLazy($event)" [paginator]="true"
+    [rows]="10" [totalRecords]="totalRecords" [loading]="loading" selectionMode="single" [(selection)]="selectedEmpleado" (onRowSelect)="onRowSelect($event)">
+    <ng-template pTemplate="caption">
+        <div class="ui-helper-clearfix">
+            <button type="button" pButton icon="fa-plus" (click)="showDialogToAdd()" label="Agregar" style="float:right"></button>
+            <!-- <button  class="ui-button-danger" type="button" pButton icon="fa-file-o" iconPos="left" label="Todo" (click)="dt.exportCSV()" style="float:left"></button>
+            <button  class="ui-button-warning" type="button" pButton icon="fa-file" iconPos="left" label="Datos Seleccionados" (click)="dt.exportCSV({selectionOnly:true})"
+                style="float:right"></button> -->
+        </div>
+    </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns">
@@ -34,56 +42,74 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr>
-            <td *ngFor="let col of columns">
+        <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of columns" class="{{col.itemClass}}">
                 {{rowData[col.field]}}
             </td>
         </tr>
     </ng-template>
+    <ng-template pTemplate="summary" let-rowData>
+        Total Empleados cargados {{totalRecords}}
+
+    </ng-template>
 </p-table>
-<!-- <p-table [value]="empleados" *ngIf="empleados">
-  <ng-template pTemplate="header">
-      <tr>
-          <th>Código</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Documento</th>
-          <th>Estado</th>
-      </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-empleado>
-      <tr>
-        <td>{{ empleado.EMPLEADO }}</td>
-        <td>{{ empleado.NOMBRE }}</td>
-        <td>{{ empleado.APELLIDO }}</td>
-        <td>{{ empleado.DOCTO_IDENT }}</td>
-        <td>{{ empleado.ESTADO=='' ? 'Activo' : 'Retirado' }}</td>
-      </tr>
-  </ng-template>
-</p-table> -->
-<!-- <table class='table' *ngIf="empleados">
-  <thead>
-    <tr>
-      <th>Código</th>
-      <th>Nombre</th>
-      <th>Apellido</th>
-      <th>Documento</th>
-      <th>Estado</th>
-      <th>Elimiar</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let empleado of empleados">
-      <td>{{ empleado.EMPLEADO }}</td>
-      <td>{{ empleado.NOMBRE }}</td>
-      <td>{{ empleado.APELLIDO }}</td>
-      <td>{{ empleado.DOCTO_IDENT }}</td>
-      <td>{{ empleado.ESTADO=='' ? 'Activo' : 'Retirado' }}</td>
-      <td>
-        <button id="btnEliminar" class="btn btn-danger" type="button" (click)="DeleteEmpleado(empleado.EMPLEADO)">
-          <span class='glyphicon glyphicon-trash'></span>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table> -->
+
+<p-dialog header="Registro de Empleado" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
+    [width]="600">
+    <div class="ui-g ui-fluid" *ngIf="empleado">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="EMPLEADO">Código</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="EMPLEADO" [(ngModel)]="empleado.EMPLEADO" />
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="NOMBRE">Nombre</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="NOMBRE" [(ngModel)]="empleado.NOMBRE" />
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="APELLIDO">Apellido</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="APELLIDO" [(ngModel)]="empleado.APELLIDO" />
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="ESTADO">Estado</label>
+            </div>
+            <div class="ui-g-8">
+                <p-dropdown [options]="EstadosEMP" [(ngModel)]="empleado.ESTADO"></p-dropdown>
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="DOCTO_IDENT">Documento</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="DOCTO_IDENT" [(ngModel)]="empleado.DOCTO_IDENT" />
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="F_NACE">F. Nacimiento</label>
+            </div>
+            <div class="ui-g-8">
+                <p-inputMask mask="99/99/9999" [(ngModel)]="empleado.F_NACE" placeholder="dd/mm/yyyy" slotChar="dd/mm/yyyy"></p-inputMask>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa-close" (click)="delete()" label="Delete"></button>
+            <button type="button" pButton icon="fa-check" (click)="save()" label="Save"></button>
+        </div>
+    </p-footer>
+</p-dialog>

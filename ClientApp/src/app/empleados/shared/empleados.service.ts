@@ -18,4 +18,13 @@ export class EmpleadosService {
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.http.delete(this.baseUrl + 'api/Empleado/' + IdEmpleado, httpOptions);
   }
+  SaveEmpleado(Empleado: Empleado) {
+    let body = JSON.stringify(Empleado);
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.http.post(this.baseUrl + 'api/Empleado/' ,body, httpOptions);
+  }
+  UpdateEmpleado(Empleado: Empleado) {
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.http.delete(this.baseUrl + 'api/Empleado/' + Empleado, httpOptions);
+  }
 }
