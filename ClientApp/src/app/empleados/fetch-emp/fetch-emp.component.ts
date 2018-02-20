@@ -61,10 +61,10 @@ export class FetchEmpComponent implements OnInit {
     this.EmpleadoSerivce.DeleteEmpleado(idEmpleado).subscribe(res => { this.GetEmpleados(1, this.PageSize) });
   }
   SaveEmpleado(Empleado: Empleado): void {
-    this.EmpleadoSerivce.SaveEmpleado(Empleado).subscribe(res => { console.log(res); this.GetEmpleados() });
+    this.EmpleadoSerivce.SaveEmpleado(Empleado).subscribe(res => { console.log(res); this.GetEmpleados(1, this.PageSize) });
   }
   UpdateEmpleado(Empleado: Empleado): void {
-    this.EmpleadoSerivce.UpdateEmpleado(Empleado).subscribe(res => { this.GetEmpleados() });
+    this.EmpleadoSerivce.UpdateEmpleado(Empleado).subscribe(res => { this.GetEmpleados(1, this.PageSize) });
   }
   loadEmpleadosLazy(event: LazyLoadEvent) {
     this.loading = true;

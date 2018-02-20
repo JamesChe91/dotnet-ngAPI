@@ -6,9 +6,8 @@
     <em>Loading...</em>
 </p>
 <p-paginator rows="{{PageSize}}" totalRecords="{{totalRecords}}" (onPageChange)="paginate($event)"></p-paginator>
-<p-table [columns]="cols" [value]="empleados" [lazy]="true" (onLazyLoad)="loadEmpleadosLazy($event)" [paginator]="false"
-    [rows]="PageSize" [totalRecords]="totalRecords">
-<p-table #dt [columns]="cols" [value]="empleados" [lazy]="true" (onLazyLoad)="loadEmpleadosLazy($event)" [paginator]="true"
+
+<p-table #dt [columns]="cols" [value]="empleados" [lazy]="true" (onLazyLoad)="loadEmpleadosLazy($event)" [paginator]="false"
     [rows]="10" [totalRecords]="totalRecords" [loading]="loading" selectionMode="single" [(selection)]="selectedEmpleado" (onRowSelect)="onRowSelect($event)">
     <ng-template pTemplate="caption">
         <div class="ui-helper-clearfix">
