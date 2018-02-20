@@ -32,7 +32,37 @@ namespace Midas.Repository
             using (IDbConnection dbConnection = _connection)
             {
                 dbConnection.Open();
-                return dbConnection.Query<Empleado>("SELECT EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO FROM EMP WHERE ISNULL(ESTADO,'')=''");
+                return dbConnection.Query<Empleado>(@"
+SELECT TOP 1000 EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO,COUNT(*) OVER (ORDER BY ESTADO) NREGS,
+       CEILING(COUNT(*) OVER (ORDER BY ESTADO)/CONVERT(FLOAT,10)) NPAGS 
+FROM EMP WHERE ISNULL(ESTADO,'')=''");
+            }
+        }
+
+        public IEnumerable<Empleado> GetAllByPage(int PageIndex, int PageSize)
+        {
+            using (IDbConnection dbConnection = _connection)
+            {
+                string Squery = $@"
+DECLARE @RecordCount INT
+SELECT  ROW_NUMBER() OVER(ORDER BY EMPLEADO)AS RowNumber,EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO
+INTO #RESULTS
+FROM
+(
+	SELECT EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO
+	FROM EMP 
+	
+) AS DATOS       
+SELECT @RecordCount=COUNT(*) FROM #Results
+
+SELECT EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO,ISNULL(@RecordCount,0) totalRecords
+FROM #RESULTS
+WHERE RowNumber BETWEEN(@PAGEINDEX-1)*@PageSize+1 AND(((@PAGEINDEX-1)*@PAGESIZE+1)+@PAGESIZE)-1
+ORDER BY EMPLEADO";
+                dbConnection.Open();
+                return dbConnection.Query<Empleado>(Squery, new { PAGEINDEX = PageIndex, PAGESIZE = PageSize });
+                // .Execute();
+
             }
         }
 

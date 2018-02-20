@@ -14,6 +14,9 @@ export class EmpleadosService {
   GetEmpleados() {
     return this.http.get<Empleado[]>(this.baseUrl + 'api/Empleado');
   }
+  GetEmpleadosByPage(PageIndex: number, PageSize: number) {
+    return this.http.get<Empleado[]>(this.baseUrl + 'api/Empleado/' + PageIndex + '/' + PageSize);
+  }
   DeleteEmpleado(IdEmpleado: string) {
     const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     return this.http.delete(this.baseUrl + 'api/Empleado/' + IdEmpleado, httpOptions);

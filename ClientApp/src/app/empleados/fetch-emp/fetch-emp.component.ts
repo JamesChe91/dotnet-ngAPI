@@ -12,31 +12,32 @@ export class FetchEmpComponent implements OnInit {
   public empleados: Empleado[];
   datasource: Empleado[];
   totalRecords: number;
+  PageSize: number = 10;
   cols: any[];
   loading: boolean;
   constructor(private EmpleadoSerivce: EmpleadosService, @Inject('BASE_URL') baseUrl: string) {
- 
+
   }
   ngOnInit() {
-    this.GetEmpleados();
+    this.GetEmpleados(1, this.PageSize);
     this.cols = [
       { field: 'EMPLEADO', header: 'Código' },
       { field: 'NOMBRE', header: 'Nombre' },
       { field: 'APELLIDO', header: 'Apellido' },
       { field: 'DOCTO_IDENT', header: 'Documento' }
-  ];
-  this.loading = true;
+    ];
+    this.loading = true;
   }
 
-  GetEmpleados(): void {
-    this.EmpleadoSerivce.GetEmpleados().subscribe(result => {
-      this.empleados=result;
+  GetEmpleados(PageIndex: number, PageSize: number): void {
+    this.EmpleadoSerivce.GetEmpleadosByPage(PageIndex, PageSize).subscribe(result => {
+      this.empleados = result;
       this.datasource = result;
-      this.totalRecords = this.datasource.length;
+      this.totalRecords = this.datasource[0].totalRecords;
     }, error => console.error(error));
   }
   DeleteEmpleado(idEmpleado: string): void {
-    this.EmpleadoSerivce.DeleteEmpleado(idEmpleado).subscribe(res => { this.GetEmpleados() });
+    this.EmpleadoSerivce.DeleteEmpleado(idEmpleado).subscribe(res => { this.GetEmpleados(1, this.PageSize) });
   }
   loadEmpleadosLazy(event: LazyLoadEvent) {
     this.loading = true;
@@ -54,5 +55,10 @@ export class FetchEmpComponent implements OnInit {
         this.loading = false;
       }
     }, 1000);
+  }
+
+  paginate(event) {
+    console.log(event);
+    this.GetEmpleados(event.page + 1, this.PageSize);
   }
 }
