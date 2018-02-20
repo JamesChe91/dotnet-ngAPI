@@ -32,10 +32,11 @@ namespace pruebaConcepto.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]Empleado emp)
+        public IActionResult Post([FromBody]Empleado emp)
         {
             if (ModelState.IsValid)
                 empleadoRepository.Add(emp);
+            return new CreatedAtActionResult("Create", "Empleado", "aaa", new { id = emp.EMPLEADO });
         }
 
         // PUT api/values/5

@@ -13,6 +13,11 @@ import { FetchEmpComponent } from './empleados/fetch-emp/fetch-emp.component';
 import { EmpleadosService } from './empleados/shared/empleados.service';
 import { MenuModule } from 'primeng/menu';
 import {TableModule} from 'primeng/table';
+import {ButtonModule} from 'primeng/button';
+import {DialogModule} from 'primeng/dialog';
+import {InputTextModule} from 'primeng/inputtext';
+import {DropdownModule} from 'primeng/dropdown';
+import {InputMaskModule} from 'primeng/inputmask';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +34,11 @@ import {TableModule} from 'primeng/table';
     FormsModule,
     MenuModule,
     TableModule,
+    ButtonModule,
+    DialogModule,
+    InputTextModule,
+    DropdownModule,
+    InputMaskModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },

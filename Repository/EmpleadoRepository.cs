@@ -20,8 +20,8 @@ namespace Midas.Repository
         {
             using (IDbConnection dbConnection = _connection)
             {
-                string Squery = "INSERT INTO EMP (EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO)"
-                                + " VALUES(@EMPLEADO,@NOMBRE,@APELLIDO,@DOCTO_IDENT,@ESTADO)";
+                string Squery = "INSERT INTO EMP (EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO,F_NACE)"
+                                + " VALUES(@EMPLEADO,@NOMBRE,@APELLIDO,@DOCTO_IDENT,@ESTADO,@F_NACE)";
                 dbConnection.Open();
                 dbConnection.Execute(Squery, emp);
             }
@@ -32,7 +32,7 @@ namespace Midas.Repository
             using (IDbConnection dbConnection = _connection)
             {
                 dbConnection.Open();
-                return dbConnection.Query<Empleado>("SELECT EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO FROM EMP WHERE ISNULL(ESTADO,'')=''");
+                return dbConnection.Query<Empleado>("SELECT TOP 50 EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO,CONVERT(VARCHAR(10),F_NACE,103)F_NACE FROM EMP WHERE ISNULL(ESTADO,'')='R'");
             }
         }
 
@@ -40,7 +40,7 @@ namespace Midas.Repository
         {
             using (IDbConnection dbConnection = _connection)
             {
-                string Squery = "SELECT EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO FROM EMP"
+                string Squery = "SELECT EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO,CONVERT(VARCHAR(10),F_NACE,103)F_NACE FROM EMP"
                                + " WHERE EMPLEADO = @EMPLEADO";
                 dbConnection.Open();
                 return dbConnection.QueryFirstOrDefault<Empleado>(Squery, new { EMPLEADO = Sempleado });
@@ -62,7 +62,7 @@ namespace Midas.Repository
         {
             using (IDbConnection dbConnection = _connection)
             {
-                string Squery = @"UPDATE EMP SET EMPLEADO = @EMPLEADO,NOMBRE = @NOMBRE,APELLIDO = @APELLIDO,DOCTO_IDENT = @DOCTO_IDENT,ESTADO = @ESTADO";
+                string Squery = @"UPDATE EMP SET EMPLEADO = @EMPLEADO,NOMBRE = @NOMBRE,APELLIDO = @APELLIDO,DOCTO_IDENT = @DOCTO_IDENT,ESTADO = @ESTADO, F_NACE=@F_NACE";
                 dbConnection.Open();
                 dbConnection.Query(Squery, emp);
             }
