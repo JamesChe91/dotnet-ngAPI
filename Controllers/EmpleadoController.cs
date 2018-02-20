@@ -55,5 +55,13 @@ namespace pruebaConcepto.Controllers
             empleadoRepository.Delete(Sempleado);
             return new CreatedAtActionResult("Delete", "Empleado", "aaa", new { id = Sempleado });
         }
+
+
+        [HttpGet("{PageIndex}/{PageSize}")]
+        public IEnumerable<Empleado> GetAllByPage([FromRoute]int PageIndex, [FromRoute] int PageSize)
+        {
+            return empleadoRepository.GetAllByPage(PageIndex, PageSize);
+        }
+
     }
 }

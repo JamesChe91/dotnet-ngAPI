@@ -14,6 +14,7 @@ export class FetchEmpComponent implements OnInit {
   public empleados: Empleado[];
   datasource: Empleado[];
   totalRecords: number;
+  PageSize: number = 10;
   cols: any[];
   loading: boolean;
   displayDialog: boolean;
@@ -26,7 +27,7 @@ export class FetchEmpComponent implements OnInit {
 
   }
   ngOnInit() {
-    this.GetEmpleados();
+    this.GetEmpleados(1, this.PageSize);
     this.cols = [
       { field: 'EMPLEADO', header: 'Código', itemClass: '' },
       { field: 'NOMBRE', header: 'Nombre', itemClass: '' },
@@ -43,11 +44,11 @@ export class FetchEmpComponent implements OnInit {
     
   }
 
-  GetEmpleados(): void {
-    this.EmpleadoSerivce.GetEmpleados().subscribe(result => {
+   GetEmpleados(PageIndex: number, PageSize: number): void {
+    this.EmpleadoSerivce.GetEmpleadosByPage(PageIndex, PageSize).subscribe(result => {
       this.empleados = result;
       this.datasource = result;
-      this.totalRecords = this.datasource.length;
+      this.totalRecords = this.datasource[0].totalRecords;
     }, error => console.error(error));
   }
 
@@ -57,7 +58,7 @@ export class FetchEmpComponent implements OnInit {
   }
 
   DeleteEmpleado(idEmpleado: string): void {
-    this.EmpleadoSerivce.DeleteEmpleado(idEmpleado).subscribe(res => { this.GetEmpleados() });
+    this.EmpleadoSerivce.DeleteEmpleado(idEmpleado).subscribe(res => { this.GetEmpleados(1, this.PageSize) });
   }
   SaveEmpleado(Empleado: Empleado): void {
     this.EmpleadoSerivce.SaveEmpleado(Empleado).subscribe(res => { console.log(res); this.GetEmpleados() });
@@ -82,6 +83,13 @@ export class FetchEmpComponent implements OnInit {
       }
     }, 1000);
   }
+
+
+  paginate(event) {
+    console.log(event);
+    this.GetEmpleados(event.page + 1, this.PageSize);
+  }
+
   showDialogToAdd() {
     this.newEmpleado = true;
     this.empleado = {};
@@ -92,7 +100,6 @@ export class FetchEmpComponent implements OnInit {
     let empleados = [...this.empleados];
     this.empleado.F_NACE=this.sFecha(this.empleado.F_NACE);
     if (this.newEmpleado)
-      // empleados.push(this.empleado);
       this.SaveEmpleado(this.empleado);
     else
       empleados[this.empleados.indexOf(this.selectedEmpleado)] = this.empleado;
@@ -103,8 +110,6 @@ export class FetchEmpComponent implements OnInit {
 
   delete() {
     this.DeleteEmpleado(this.selectedEmpleado.EMPLEADO);
-    // let index = this.empleados.indexOf(this.selectedEmpleado);
-    // this.empleados = this.empleados.filter((val, i) => i != index);
     this.empleado = null;
     this.displayDialog = false;
   }

@@ -5,5 +5,6 @@ export interface Empleado {
     DOCTO_IDENT?;
     ESTADO?;
     F_NACE?;
-  }
-  
+    totalRecords: number;
+}
+ 
