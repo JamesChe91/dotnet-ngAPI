@@ -20,8 +20,8 @@ namespace Midas.Repository
         {
             using (IDbConnection dbConnection = _connection)
             {
-                string Squery = "INSERT INTO EMP (EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO)"
-                                + " VALUES(@EMPLEADO,@NOMBRE,@APELLIDO,@DOCTO_IDENT,@ESTADO)";
+                string Squery = "INSERT INTO EMP (EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO,F_NACE)"
+                                + " VALUES(@EMPLEADO,@NOMBRE,@APELLIDO,@DOCTO_IDENT,@ESTADO,@F_NACE)";
                 dbConnection.Open();
                 dbConnection.Execute(Squery, emp);
             }
@@ -32,10 +32,11 @@ namespace Midas.Repository
             using (IDbConnection dbConnection = _connection)
             {
                 dbConnection.Open();
+
                 return dbConnection.Query<Empleado>(@"
-SELECT TOP 1000 EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO,COUNT(*) OVER (ORDER BY ESTADO) NREGS,
-       CEILING(COUNT(*) OVER (ORDER BY ESTADO)/CONVERT(FLOAT,10)) NPAGS 
-FROM EMP WHERE ISNULL(ESTADO,'')=''");
+SELECT TOP 50 EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO,CONVERT(VARCHAR(10),F_NACE,103)F_NACE 
+FROM EMP 
+WHERE ISNULL(ESTADO,'')='R'");
             }
         }
 
@@ -45,24 +46,21 @@ FROM EMP WHERE ISNULL(ESTADO,'')=''");
             {
                 string Squery = $@"
 DECLARE @RecordCount INT
-SELECT  ROW_NUMBER() OVER(ORDER BY EMPLEADO)AS RowNumber,EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO
+SELECT  ROW_NUMBER() OVER(ORDER BY EMPLEADO)AS RowNumber,EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO,F_NACE
 INTO #RESULTS
 FROM
 (
-	SELECT EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO
-	FROM EMP 
-	
+	SELECT EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO,CONVERT(VARCHAR(10),F_NACE,103)F_NACE 
+	FROM EMP	
 ) AS DATOS       
 SELECT @RecordCount=COUNT(*) FROM #Results
 
-SELECT EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO,ISNULL(@RecordCount,0) totalRecords
+SELECT EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO,F_NACE,ISNULL(@RecordCount,0) totalRecords
 FROM #RESULTS
 WHERE RowNumber BETWEEN(@PAGEINDEX-1)*@PageSize+1 AND(((@PAGEINDEX-1)*@PAGESIZE+1)+@PAGESIZE)-1
 ORDER BY EMPLEADO";
                 dbConnection.Open();
-                return dbConnection.Query<Empleado>(Squery, new { PAGEINDEX = PageIndex, PAGESIZE = PageSize });
-                // .Execute();
-
+                return dbConnection.Query<Empleado>(Squery, new { PAGEINDEX = PageIndex, PAGESIZE = PageSize });                
             }
         }
 
@@ -70,7 +68,7 @@ ORDER BY EMPLEADO";
         {
             using (IDbConnection dbConnection = _connection)
             {
-                string Squery = "SELECT EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO FROM EMP"
+                string Squery = "SELECT EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO,CONVERT(VARCHAR(10),F_NACE,103)F_NACE FROM EMP"
                                + " WHERE EMPLEADO = @EMPLEADO";
                 dbConnection.Open();
                 return dbConnection.QueryFirstOrDefault<Empleado>(Squery, new { EMPLEADO = Sempleado });
@@ -92,7 +90,7 @@ ORDER BY EMPLEADO";
         {
             using (IDbConnection dbConnection = _connection)
             {
-                string Squery = @"UPDATE EMP SET EMPLEADO = @EMPLEADO,NOMBRE = @NOMBRE,APELLIDO = @APELLIDO,DOCTO_IDENT = @DOCTO_IDENT,ESTADO = @ESTADO";
+                string Squery = @"UPDATE EMP SET EMPLEADO = @EMPLEADO,NOMBRE = @NOMBRE,APELLIDO = @APELLIDO,DOCTO_IDENT = @DOCTO_IDENT,ESTADO = @ESTADO, F_NACE=@F_NACE";
                 dbConnection.Open();
                 dbConnection.Query(Squery, emp);
             }

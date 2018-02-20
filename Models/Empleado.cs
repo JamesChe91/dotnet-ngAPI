@@ -8,6 +8,7 @@ namespace Midas.Models
         public string APELLIDO { get; set; }
         public string DOCTO_IDENT { get; set; }
         public string ESTADO { get; set; }
+        public string F_NACE { get; set; }
         public int totalRecords { get; set; }
     }
 }

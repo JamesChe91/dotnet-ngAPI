@@ -12,8 +12,15 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { FetchEmpComponent } from './empleados/fetch-emp/fetch-emp.component';
 import { EmpleadosService } from './empleados/shared/empleados.service';
 import { MenuModule } from 'primeng/menu';
+ 
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
+import {ButtonModule} from 'primeng/button';
+import {DialogModule} from 'primeng/dialog';
+import {InputTextModule} from 'primeng/inputtext';
+import {DropdownModule} from 'primeng/dropdown';
+import {InputMaskModule} from 'primeng/inputmask';
+ 
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,8 +36,14 @@ import { PaginatorModule } from 'primeng/paginator';
     HttpClientModule,
     FormsModule,
     MenuModule,
-    TableModule,
-    PaginatorModule,
+    TableModule, 
+    PaginatorModule, 
+    ButtonModule,
+    DialogModule,
+    InputTextModule,
+    DropdownModule,
+    InputMaskModule,
+    
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },

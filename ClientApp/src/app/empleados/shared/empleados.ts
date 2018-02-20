@@ -1,8 +1,10 @@
 export interface Empleado {
-  EMPLEADO: string;
-  NOMBRE: string;
-  APELLIDO: string;
-  DOCTO_IDENT: string;
-  ESTADO: string;
-  totalRecords: number;
+    EMPLEADO?;
+    NOMBRE?;
+    APELLIDO?;
+    DOCTO_IDENT?;
+    ESTADO?;
+    F_NACE?;
+    totalRecords: number;
 }
+ 
