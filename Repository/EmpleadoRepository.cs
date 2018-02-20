@@ -32,7 +32,7 @@ namespace Midas.Repository
             using (IDbConnection dbConnection = _connection)
             {
                 dbConnection.Open();
-                return dbConnection.Query<Empleado>("SELECT TOP 50 EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO FROM EMP WHERE ESTADO=''");
+                return dbConnection.Query<Empleado>("SELECT EMPLEADO,NOMBRE,APELLIDO,DOCTO_IDENT,ESTADO FROM EMP WHERE ISNULL(ESTADO,'')=''");
             }
         }
 

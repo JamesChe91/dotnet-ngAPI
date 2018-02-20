@@ -7,7 +7,61 @@
   <em>Loading...</em>
 </p>
 
-<table class='table' *ngIf="empleados">
+<!-- <p-table [columns]="cols" [value]="empleados" [paginator]="true" [rows]="10">
+  <ng-template pTemplate="header" let-columns>
+      <tr>
+          <th *ngFor="let col of columns">
+              {{col.header}}
+          </th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+          <td *ngFor="let col of columns">
+              {{rowData[col.field]}}
+          </td>
+      </tr>
+  </ng-template>
+</p-table> -->
+
+<p-table [columns]="cols" [value]="empleados" [lazy]="true" (onLazyLoad)="loadEmpleadosLazy($event)" [paginator]="true" 
+    [rows]="10" [totalRecords]="totalRecords" [loading]="loading">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<!-- <p-table [value]="empleados" *ngIf="empleados">
+  <ng-template pTemplate="header">
+      <tr>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Documento</th>
+          <th>Estado</th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-empleado>
+      <tr>
+        <td>{{ empleado.EMPLEADO }}</td>
+        <td>{{ empleado.NOMBRE }}</td>
+        <td>{{ empleado.APELLIDO }}</td>
+        <td>{{ empleado.DOCTO_IDENT }}</td>
+        <td>{{ empleado.ESTADO=='' ? 'Activo' : 'Retirado' }}</td>
+      </tr>
+  </ng-template>
+</p-table> -->
+<!-- <table class='table' *ngIf="empleados">
   <thead>
     <tr>
       <th>Código</th>
@@ -32,4 +86,4 @@
       </td>
     </tr>
   </tbody>
-</table>
+</table> -->
